@@ -9,7 +9,7 @@ import org.openzen.zencode.java.ZenCodeGlobals;
 import org.openzen.zencode.java.ZenCodeType;
 
 @ZenRegister
-@ZenCodeType.Name("crafttweaker.api.CTFurnaceManager")
+@ZenCodeType.Name("crafttweaker.api.FurnaceManager")
 public class CTFurnaceManager implements ISingleRecipeManager {
     
     @ZenCodeGlobals.Global("furnace")
