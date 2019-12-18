@@ -7,6 +7,7 @@ apply from: rootProject.file('configuration.gradle')
 // -- end of configurable properties
 
 repositories {
+ mavenLocal()
 	mavenCentral()
 	maven {
 		name = "forge"

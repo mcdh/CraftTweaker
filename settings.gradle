@@ -9,10 +9,11 @@ rootProject.name = 'MineTweaker3'
 // be automatically the subproject of this project.
 def subDirs = rootDir.listFiles(new FileFilter() {
     public boolean accept(File file) {
+        final String lName = file.name.toLowerCase();
         if (!file.isDirectory()) {
             return false
         }
-        if (file.name == 'buildSrc') {
+        if (file.name == 'buildSrc' || lName.contains('11') || lName.contains('18')) {
             return false
         }
         return new File(file, 'build.gradle').isFile()

@@ -71,9 +71,9 @@ task wrapper(type: Wrapper, description: 'Creates and deploys the Gradle wrapper
 
 subprojects.each { subproject -> evaluationDependsOn( subproject.path ) }
 
-task setupDecompWorkspaceAll(dependsOn: projects1710.collect { ':' + it + ":setupDecompWorkspace" } + projects18.collect { ':' + it + ':setupDecompWorkspace'} + projects1102.collect { ':' + it + ':setupDecompWorkspace'} + projects1112.collect { ':' + it + ':setupDecompWorkspace'}) {}
+task setupDecompWorkspaceAll(dependsOn: projects1710.collect { ':' + it + ":setupDecompWorkspace" } /*+ projects18.collect { ':' + it + ':setupDecompWorkspace'} + projects1102.collect { ':' + it + ':setupDecompWorkspace'} + projects1112.collect { ':' + it + ':setupDecompWorkspace'}*/) {}
 
-task setupCIWorkspaceAll(dependsOn: projects1710.collect { ':' + it + ":setupCIWorkspace" } + projects18.collect { ':' + it + ':setupCIWorkspace'} + projects1102.collect { ':' + it + ':setupCIWorkspace'} + projects1112.collect { ':' + it + ':setupCIWorkspace'}) {}
+task setupCIWorkspaceAll(dependsOn: projects1710.collect { ':' + it + ":setupCIWorkspace" } /*+ projects18.collect { ':' + it + ':setupCIWorkspace'} + projects1102.collect { ':' + it + ':setupCIWorkspace'} + projects1112.collect { ':' + it + ':setupCIWorkspace'}*/) {}
 
 task assembleMC1710(type: Jar, dependsOn: [\
 		':ZenScript:build',
@@ -89,6 +89,7 @@ task assembleMC1710(type: Jar, dependsOn: [\
 	}
 }
 
+/*
 task assembleMC18(type: Jar, dependsOn: [\
 		':ZenScript:build',
 		':MineTweaker3-API:build']
@@ -130,6 +131,7 @@ task assembleMC1112(type: Jar, dependsOn: [\
         from zipTree(project(p).jar.archivePath)
     }
 }
+*/
 
 task assembleDevBase1710(type: Jar, dependsOn: [
 		':ZenScript:build',
@@ -142,6 +144,7 @@ task assembleDevBase1710(type: Jar, dependsOn: [
 	from project(':MineTweaker3-MC1710-Main').sourceSets.main.output
 }
 
+/*
 task assembleDevBase18(type: Jar, dependsOn: [
 		':ZenScript:build',
 		':MineTweaker3-API:build',
@@ -174,6 +177,7 @@ task assembleDevBase1112(type: Jar, dependsOn: [
     from project(':MineTweaker3-API').sourceSets.main.output
     from project(':MineTweaker3-MC1112-Main').sourceSets.main.output
 }
+*/
 
 task assembleDevFull1710(type: Jar, dependsOn: [
 		':ZenScript:build',
@@ -190,6 +194,7 @@ task assembleDevFull1710(type: Jar, dependsOn: [
 }
 
 
+/*
 task assembleDevFull18(type: Jar, dependsOn: [
 		':ZenScript:build',
 		':MineTweaker3-API:build']
@@ -231,21 +236,22 @@ task assembleDevFull1112(type: Jar, dependsOn: [
         from project(p).sourceSets.main.output
     }
 }
+*/
 
 task assembleAll(dependsOn: [
 	assembleMC1710,
-	assembleMC18,
-	assembleMC1102,
-	assembleMC1112,
+//	assembleMC18,
+//	assembleMC1102,
+//	assembleMC1112,
 	assembleDevBase1710,
-	assembleDevBase18,
-	assembleDevBase1102,
-	assembleDevBase1112,
+//	assembleDevBase18,
+//	assembleDevBase1102,
+//	assembleDevBase1112,
 	assembleDevFull1710,
-	assembleDevFull18,
-	assembleDevFull1102,
-	assembleDevFull1112]) {
-}
+//	assembleDevFull18,
+//	assembleDevFull1102,
+//	assembleDevFull1112
+]) {}
 
 configurations {
     deployerJars

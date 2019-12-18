@@ -29,8 +29,8 @@ import static minetweaker.api.minecraft.MineTweakerMC.getItemStack;
  * @author Stan
  */
 public class MCOreDictEntry implements IOreDictEntry {
-    private static final List<ArrayList<ItemStack>> OREDICT_CONTENTS = MineTweakerHacks.getOreIdStacks();
-    private static final List<ArrayList<ItemStack>> OREDICT_CONTENTS_UN = MineTweakerHacks.getOreIdStacksUn();
+//    private static final List<ArrayList<ItemStack>> OREDICT_CONTENTS = MineTweakerHacks.getOreIdStacks();
+//    private static final List<ArrayList<ItemStack>> OREDICT_CONTENTS_UN = MineTweakerHacks.getOreIdStacksUn();
 
     private final int id;
 
@@ -270,7 +270,10 @@ public class MCOreDictEntry implements IOreDictEntry {
 
         @Override
         public void apply() {
-            OreDictionary.registerOre(id, item);
+            //Create a new entry with this id
+            final String name = OreDictionary.getOreName(id);
+            OreDictionary.registerOre(name, item);
+//            OreDictionary.registerOre(id, item);
         }
 
         @Override
@@ -280,7 +283,9 @@ public class MCOreDictEntry implements IOreDictEntry {
 
         @Override
         public void undo() {
-            OREDICT_CONTENTS.get(id).remove(item);
+            final String name = OreDictionary.getOreName(id);
+            OreDictionary.removeOre(name, item);
+//            OREDICT_CONTENTS.get(id).remove(item);
         }
 
         @Override
@@ -300,24 +305,43 @@ public class MCOreDictEntry implements IOreDictEntry {
     }
 
     private static class ActionMirror implements IUndoableAction {
-        private final Integer idTarget;
-        private final Integer idSource;
+        private final Integer
+         idTarget,
+         idSource;
 
-        private final ArrayList<ItemStack> targetCopy;
-        private final ArrayList<ItemStack> targetCopyUn;
+        private List<ItemStack>
+         origStacks,
+         newStacks;
+
+        private OreDictionary.OreDictionaryEntry target;
+
+//        private final ArrayList<ItemStack> targetCopy;
+//        private final ArrayList<ItemStack> targetCopyUn;
 
         public ActionMirror(Integer idTarget, Integer idSource) {
             this.idTarget = idTarget;
             this.idSource = idSource;
+            target = OreDictionary.getEntry(idTarget);
+//            targetCopy = OreDictionary.getOres(idTarget);
 
-            targetCopy = OREDICT_CONTENTS.get(idTarget);
-            targetCopyUn = OREDICT_CONTENTS_UN.get(idTarget);
+//            targetCopy = OREDICT_CONTENTS.get(idTarget);
+//            targetCopyUn = OREDICT_CONTENTS_UN.get(idTarget);
         }
 
         @Override
         public void apply() {
-            OREDICT_CONTENTS.set(idTarget, OREDICT_CONTENTS.get(idSource));
-            OREDICT_CONTENTS_UN.set(idTarget, OREDICT_CONTENTS_UN.get(idSource));
+            //Clear previous associations
+            origStacks = target.getStacks();
+            for (final ItemStack stack : origStacks) {
+                target.removeStack(stack);
+            }
+            //Register new associations
+            newStacks = OreDictionary.getEntry(idSource).getStacks();
+            for (final ItemStack stack : newStacks) {
+                target.addStack(stack);
+            }
+//            OREDICT_CONTENTS.set(idTarget, OREDICT_CONTENTS.get(idSource));
+//            OREDICT_CONTENTS_UN.set(idTarget, OREDICT_CONTENTS_UN.get(idSource));
         }
 
         @Override
@@ -327,8 +351,16 @@ public class MCOreDictEntry implements IOreDictEntry {
 
         @Override
         public void undo() {
-            OREDICT_CONTENTS.set(idTarget, targetCopy);
-            OREDICT_CONTENTS_UN.set(idTarget, targetCopyUn);
+            //Remove new associations
+            for (final ItemStack stack : newStacks) {
+                target.removeStack(stack);
+            }
+            //Add previous associations
+            for (final ItemStack stack : origStacks) {
+                target.addStack(stack);
+            }
+//            OREDICT_CONTENTS.set(idTarget, targetCopy);
+//            OREDICT_CONTENTS_UN.set(idTarget, targetCopyUn);
         }
 
         @Override
@@ -358,7 +390,9 @@ public class MCOreDictEntry implements IOreDictEntry {
 
         @Override
         public void apply() {
-            OREDICT_CONTENTS.get(id).remove(item);
+            final String name = OreDictionary.getOreName(id);
+            OreDictionary.removeOre(name, item);
+//            OREDICT_CONTENTS.get(id).remove(item);
         }
 
         @Override
@@ -368,7 +402,9 @@ public class MCOreDictEntry implements IOreDictEntry {
 
         @Override
         public void undo() {
-            OREDICT_CONTENTS.get(id).add(item);
+            final String name = OreDictionary.getOreName(id);
+            OreDictionary.registerOre(name, item);
+//            OREDICT_CONTENTS.get(id).add(item);
         }
 
         @Override
@@ -411,7 +447,9 @@ public class MCOreDictEntry implements IOreDictEntry {
         @Override
         public void undo() {
             for (ItemStack stack : OreDictionary.getOres(idSource)) {
-                OREDICT_CONTENTS.get(idTarget).remove(stack);
+                final String name = OreDictionary.getOreName(idTarget);
+                OreDictionary.removeOre(name, stack);
+//                OREDICT_CONTENTS.get(idTarget).remove(stack);
             }
         }
 
